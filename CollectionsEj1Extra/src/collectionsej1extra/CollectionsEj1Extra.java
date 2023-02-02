@@ -74,13 +74,11 @@ public class CollectionsEj1Extra {
                 case 3:
                     sa.modificacion(alumnos);
                     break;
-                case 4:
-                    alumnos.sort(Alumno.apellidoAsc);
-                    sa.mostrarLista(alumnos);
+                case 4:                    
+                    sa.mostrarListaApellidoAsc(alumnos);
                     break;
                 case 5:
-                    alumnos.sort(Alumno.nombreDesc);
-                    sa.mostrarLista(alumnos);
+                    sa.mostrarListaNombreDesc(alumnos);
                     break;
                 case 6:
                     sa.edadAlumno(alumnos);
@@ -105,8 +103,7 @@ public class CollectionsEj1Extra {
                         case 3:
                             sa.cantidadPorNacionalidad(alumnos);
                             break;
-                    }
-                    
+                    }                    
                     break;
                 case 9:
                     System.out.println("Hasta pronto.");

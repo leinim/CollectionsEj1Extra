@@ -42,15 +42,15 @@ import java.util.Scanner;
 public class ServicioAlumno {
     Scanner leer = new Scanner(System.in);
     public void alta(ArrayList<Alumno> a){
-        if (a.size() < 19){
+        if (a.size() < 20){
             System.out.println("Ingrese el nombre");
             String nombre = leer.next();
             System.out.println("Ingrese el apellido");
-            String apellido = leer.nextLine();
+            String apellido = leer.next();
             System.out.println("Ingrese la nacionalidad (ARGENTINA-CHILENA-VENEZOLANA)");
             String nacionalidad = leer.next();
-            System.out.println("Ingrese su fecha de nacimiento(dia, mes, año)");
-            Date fecha = new Date(leer.nextInt(), leer.nextInt(), leer.nextInt());
+            System.out.println("Ingrese su fecha de nacimiento(año, mes, dia)");
+            Date fecha = new Date(leer.nextInt() - 1900, leer.nextInt() - 1, leer.nextInt());
             Alumno a1 = new Alumno(nombre, apellido, nacionalidad, fecha);
             a.add(a1);
         } else {
@@ -60,7 +60,7 @@ public class ServicioAlumno {
     
     public void baja(ArrayList<Alumno> a){
         System.out.println("Ingrese el apellido del alumno a eliminar del registro");
-        String apellido = leer.nextLine();
+        String apellido = leer.next();
         Iterator<Alumno> it = a.iterator();
         int contador = 0;
         while (it.hasNext()){
@@ -70,19 +70,19 @@ public class ServicioAlumno {
                 contador++;
             }
         }
-        if (contador == a.size()-1){
+        if (contador == a.size()){
             System.out.println("No se encuentra registrado ningun alumno con el apellido ingresado");
         }
     }
     
     public void modificacion(ArrayList<Alumno> a){
         System.out.println("Ingrese el apellido del alumno a modificar");
-        String apellido = leer.next();
-        Iterator<Alumno> it = a.iterator();
+        String apellido = leer.next();        
         int contador = 0;
-        while (it.hasNext()){
-            if (it.next().getApellido().equalsIgnoreCase(apellido)) {
+        for (Alumno al : a){
+            if (al.getApellido().equalsIgnoreCase(apellido)) {
                 int opcion = 0;
+                String nuevo = " ";
                 do {
                     System.out.println("Elija una opción:");
                     System.out.println("1 - Modificar nombre");
@@ -94,20 +94,23 @@ public class ServicioAlumno {
                     switch (opcion) {
                         case 1: 
                             System.out.println("Ingrese el nuevo nombre");
-                            it.next().setNombre(leer.next());
+                            nuevo = leer.next();
+                            al.setNombre(nuevo);
                             break;
                         case 2:
                             System.out.println("Ingrese el nuevo apellido");
-                            it.next().setApellido(leer.next());
+                            nuevo = leer.next();
+                            al.setApellido(nuevo);
                             break;
                         case 3:
                             System.out.println("Ingrese la nueva nacionalidad");
-                            it.next().setNacionalidad(leer.next());
+                            nuevo = leer.next();
+                            al.setNacionalidad(nuevo);
                             break;
                         case 4:
-                            System.out.println("Ingrese la nueva fecha de nacimiento(dia-mes-año)");
-                            Date nueva = new Date(leer.nextInt(), leer.nextInt(), leer.nextInt());
-                            it.next().setNacimiento(nueva);
+                            System.out.println("Ingrese la nueva fecha de nacimiento(año, mes, dia)");
+                            Date nueva = new Date(leer.nextInt() - 1900, leer.nextInt() - 1, leer.nextInt());
+                            al.setNacimiento(nueva);
                             break;
                         case 5:
                             System.out.println("Saliendo del menu de modificacion de datos.");
@@ -121,32 +124,120 @@ public class ServicioAlumno {
                 contador++;
             }
         }
-        if (contador == a.size()-1){
+        if (contador == a.size()){
             System.out.println("No se encuentra registrado ningun alumno con el apellido ingresado");
         }
     }
     
-    public void mostrarLista(ArrayList<Alumno> a){
-        
+    public void mostrarListaApellidoAsc(ArrayList<Alumno> a){
+        a.sort(Alumno.apellidoAsc);
+        for (Alumno al : a){
+            System.out.println(al);
+        }
+    }
+    
+    public void mostrarListaNombreDesc(ArrayList<Alumno> a){
+        a.sort(Alumno.nombreDesc);
+        for (Alumno al : a){
+            System.out.println(al);
+        }
     }
     
     public void edadAlumno(ArrayList<Alumno> a){
-        
+        System.out.println("Ingrese el apellido del alumno a eliminar del registro");
+        String apellido = leer.next();        
+        Date hoy = new Date();
+        int contador = 0;
+        for (Alumno al : a){
+            if (al.getApellido().equalsIgnoreCase(apellido)){
+                int edad = hoy.getYear() - al.getNacimiento().getYear();
+                System.out.println("La edad del alumno " + al.getApellido() + " es de " + edad + " años.");
+            } else {
+                contador++;
+            }
+        }
+        if (contador == a.size()){
+            System.out.println("No se encuentra registrado ningun alumno con el apellido ingresado");
+        }
     }
     
-    public void listasPorNacionalidad(ArrayList<Alumno> a){
+    public void listasPorNacionalidad(ArrayList<Alumno> a){       
+        ArrayList<Alumno> argentinos = new ArrayList();
+        ArrayList<Alumno> chilenos = new ArrayList();
+        ArrayList<Alumno> venezolanos = new ArrayList();
         
+        for (Alumno al : a){
+            if (al.getNacionalidad().equalsIgnoreCase("ARGENTINA")){                
+                argentinos.add(al);
+            } else if (al.getNacionalidad().equalsIgnoreCase("CHILENA")) {              
+                chilenos.add(al);
+            } else {
+                venezolanos.add(al);
+            }
+        }
+        
+        for (Alumno arg : argentinos){
+            System.out.println(arg);
+        }
+        System.out.println("------------");
+        for (Alumno chi : chilenos){
+            System.out.println(chi);
+        }
+        System.out.println("------------");
+        for (Alumno ven : venezolanos){
+            System.out.println(ven);
+        }
     }
     
-    public void mayores25(ArrayList<Alumno> a){
+    public void mayores25(ArrayList<Alumno> a){        
+        Date hoy = new Date();
+        ArrayList<Alumno> mayores = new ArrayList();
         
+        for (Alumno al : a){
+            int edad = hoy.getYear()- al.getNacimiento().getYear();
+            if (edad > 24){
+                mayores.add(al);
+            }          
+        }
+        
+        for (Alumno mayor : mayores){
+           System.out.println(mayor); 
+        }                
     }
     
     public void apellidoLP(ArrayList<Alumno> a){
+        ArrayList<Alumno> listaLP = new ArrayList();
+        
+        for (Alumno alum : a){
+            if (alum.getApellido().substring(0, 1).equalsIgnoreCase("l") || alum.getApellido().substring(0, 1).equalsIgnoreCase("p")){
+                listaLP.add(alum);
+            } 
+        }
+        
+        for (Alumno al : listaLP){
+            System.out.println(al);
+        } 
         
     }
     
     public void cantidadPorNacionalidad(ArrayList<Alumno> a){
+        Iterator<Alumno> it = a.iterator(); 
+        int arg = 0;
+        int chi = 0;
+        int ven = 0;
+        for (Alumno al : a){
+            if (al.getNacionalidad().equalsIgnoreCase("ARGENTINA")){                
+                arg++;
+            } else if (al.getNacionalidad().equalsIgnoreCase("CHILENA")) {              
+                chi++;
+            } else {
+                ven++;
+            } 
+        }
+
+        System.out.println("Cantidad de alumnos  de nacionalidad argentina: " + arg + ".");
+        System.out.println("Cantidad de alumnos de nacionalidad chilena: " + chi + ".");
+        System.out.println("Cantidad de alumnos de nacionalidad venezolana: " + ven + ".");
         
     }
 }

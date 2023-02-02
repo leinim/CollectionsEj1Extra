@@ -92,14 +92,14 @@ public class Alumno {
     public static Comparator<Alumno> apellidoAsc = new Comparator<Alumno>() {
         @Override
         public int compare(Alumno t, Alumno t1) {
-            return t.getApellido().compareTo(t1.getApellido());
+            return t.getApellido().compareToIgnoreCase(t1.getApellido());
         }
     };
     
     public static Comparator<Alumno> nombreDesc = new Comparator<Alumno>() {
         @Override
         public int compare(Alumno t, Alumno t1) {
-            return t1.getNombre().compareTo(t.getNombre());
+            return t1.getNombre().compareToIgnoreCase(t.getNombre());
         }
     };
             
